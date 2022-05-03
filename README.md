@@ -1,6 +1,6 @@
 # How to run
 ```shell script
-go run github.com/smahjoub/events-api
+go run golang-events-api
 ```
 or
 ```shell script
