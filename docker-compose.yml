@@ -10,7 +10,7 @@ services:
     restart: on-failure
     environment:
       PORT: 8080
-      DB_CONN: "postgres://user:password@db:5432/db?sslmode=disable"
+      DB_CONN: "postgres://user:password@127.0.0.1:5432/db?sslmode=disable"
     volumes:
       - .:/app
     depends_on:
@@ -19,13 +19,13 @@ services:
       - db
 
   db:
-      image: postgres
-      container_name: events_db
-      ports:
-        - '5432:5432'
-      environment:
-        POSTGRES_USER: "root"
-        POSTGRES_PASSWORD: "password"
-        POSTGRES_DB: "db"
-        TZ: 'UTC'
-        PGTZ: 'UTC'
+    image: postgres
+    container_name: events_db
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "db"
+      TZ: 'UTC'
+      PGTZ: 'UTC'
