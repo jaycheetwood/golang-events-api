@@ -34,7 +34,7 @@ var (
 		Message: "Request object should be provided",
 	}
 	// ErrValidEventIdIsRequired HTTP 400
-	ErrValidEventIdIsRequired = &Error{
+	ErrValidEventIDIsRequired = &Error{
 		Code:    http.StatusBadRequest,
 		Message: "A valid event ID is required",
 	}

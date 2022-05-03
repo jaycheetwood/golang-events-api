@@ -36,7 +36,7 @@ type Event struct {
 	Status EventStatus `json:"status,omitempty"`
 
 	// Meta Information
-	CreateOn      time.Time `json:"create_on,omitempty"`
+	CreatedOn     time.Time `json:"create_on,omitempty"`
 	UpdatedOn     time.Time `json:"updated_up,omitempty"`
 	CancelledOn   time.Time `json:"cancelled_on,omitempty"`
 	RescheduledOn time.Time `json:"rescheduled_on,omitempty"`
