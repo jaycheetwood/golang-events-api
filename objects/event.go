@@ -7,9 +7,9 @@ type EventStatus string
 
 // Some default event status
 const (
-	Original   EventStatus = "original"
-	Cancelled  EventStatus = "cancelled"
-	Reschedule EventStatus = "rescheduled"
+	Original    EventStatus = "original"
+	Cancelled   EventStatus = "cancelled"
+	Rescheduled EventStatus = "rescheduled"
 )
 
 // TimeSlot for Event

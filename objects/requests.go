@@ -60,7 +60,7 @@ type EventResponseWrapper struct {
 }
 
 // JSON convert EventResponseWrapper in json
-func (e *EventResponseWrapper) JSON() []byte {
+func (e *EventResponseWrapper) Json() []byte {
 	if e == nil {
 		return []byte("{}")
 	}

@@ -1,6 +1,7 @@
 package errors
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -58,6 +59,14 @@ var (
 type Error struct {
 	Code    int
 	Message string
+}
+
+func (err *Error) Json() []byte {
+	if err == nil {
+		return []byte("{}")
+	}
+	res, _ := json.Marshal(err)
+	return res
 }
 
 func (err *Error) Error() string {
