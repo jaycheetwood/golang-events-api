@@ -31,7 +31,7 @@ func NewEventHandler(store store.IEventStore) IEventHandler {
 func (h *handler) Get(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 	if id == "" {
-		WriteError(w, errors.ErrValidEventIdIsRequired)
+		WriteError(w, errors.ErrValidEventIDIsRequired)
 		return
 	}
 	evt, err := h.store.Get(r.Context(), &objects.GetRequest{ID: id})
@@ -114,7 +114,7 @@ func (h *handler) UpdateDetails(w http.ResponseWriter, r *http.Request) {
 func (h *handler) Cancel(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 	if id == "" {
-		WriteError(w, errors.ErrValidEventIdIsRequired)
+		WriteError(w, errors.ErrValidEventIDIsRequired)
 		return
 	}
 
@@ -162,7 +162,7 @@ func (h *handler) Reschedule(w http.ResponseWriter, r *http.Request) {
 func (h *handler) Delete(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 	if id == "" {
-		WriteError(w, errors.ErrValidEventIdIsRequired)
+		WriteError(w, errors.ErrValidEventIDIsRequired)
 		return
 	}
 
