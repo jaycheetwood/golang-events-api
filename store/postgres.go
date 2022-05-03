@@ -73,7 +73,7 @@ func (p *pg) Create(ctx context.Context, in *objects.CreateRequest) error {
 	}
 	in.Event.ID = GenerateUniqueID()
 	in.Event.Status = objects.Original
-	in.Event.CreateOn = p.db.NowFunc()
+	in.Event.CreatedOn = p.db.NowFunc()
 	return p.db.WithContext(ctx).Create(in.Event).Error
 }
 

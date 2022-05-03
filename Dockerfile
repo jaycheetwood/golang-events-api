@@ -8,7 +8,7 @@ ENV GO111MODULE=on
 RUN apk update && apk add --no-cache git
 
 # set working dir
-WORKIR /app
+WORKDIR /app
 
 # Note here: To avoid downloading dependencies every time we
 # build image. Here, we are caching all the dependencies by
