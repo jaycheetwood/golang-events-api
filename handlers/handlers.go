@@ -4,6 +4,7 @@ import (
 	"golang-events-api/errors"
 	"golang-events-api/objects"
 	"golang-events-api/store"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -66,21 +67,114 @@ func (h *handler) List(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
-	panic("implement me")
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		WriteError(w, errors.ErrUnprocessableEntity)
+		return
+	}
+	evt := &objects.Event{}
+	if Unmarshal(w, data, evt) != nil {
+		return
+	}
+	if err := CheckSlot(evt.Slot); err != nil {
+		WriteError(w, err)
+		return
+	}
+	if err = h.store.Create(r.Context(), &objects.CreateRequest{Event: evt}); err != nil {
+		WriteError(w, err)
+		return
+	}
+	WriteResponse(w, &objects.EventResponseWrapper{Event: evt})
 }
 
 func (h *handler) UpdateDetails(w http.ResponseWriter, r *http.Request) {
-	panic("implement me")
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		WriteError(w, errors.ErrUnprocessableEntity)
+		return
+	}
+	req := &objects.UpdateDetailsRequest{}
+	if Unmarshal(w, data, req) != nil {
+		return
+	}
+
+	// check if event exist
+	if _, err := h.store.Get(r.Context(), &objects.GetRequest{ID: req.ID}); err != nil {
+		WriteError(w, err)
+		return
+	}
+
+	if err = h.store.UpdateDetails(r.Context(), req); err != nil {
+		WriteError(w, err)
+		return
+	}
+	WriteResponse(w, &objects.EventResponseWrapper{})
 }
 
 func (h *handler) Cancel(w http.ResponseWriter, r *http.Request) {
-	panic("implement me")
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		WriteError(w, errors.ErrValidEventIdIsRequired)
+		return
+	}
+
+	// check if event exist
+	if _, err := h.store.Get(r.Context(), &objects.GetRequest{ID: id}); err != nil {
+		WriteError(w, err)
+		return
+	}
+
+	if err := h.store.Cancel(r.Context(), &objects.CancelRequest{ID: id}); err != nil {
+		WriteError(w, err)
+		return
+	}
+	WriteResponse(w, &objects.EventResponseWrapper{})
 }
 
 func (h *handler) Reschedule(w http.ResponseWriter, r *http.Request) {
-	panic("implement me")
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		WriteError(w, errors.ErrUnprocessableEntity)
+		return
+	}
+	req := &objects.RescheduleRequest{}
+	if Unmarshal(w, data, req) != nil {
+		return
+	}
+	if err := CheckSlot(req.NewSlot); err != nil {
+		WriteError(w, err)
+		return
+	}
+
+	// check if event exist
+	if _, err := h.store.Get(r.Context(), &objects.GetRequest{ID: req.ID}); err != nil {
+		WriteError(w, err)
+		return
+	}
+
+	if err = h.store.Reschedule(r.Context(), req); err != nil {
+		WriteError(w, err)
+		return
+	}
+	WriteResponse(w, &objects.EventResponseWrapper{})
 }
 
 func (h *handler) Delete(w http.ResponseWriter, r *http.Request) {
-	panic("implement me")
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		WriteError(w, errors.ErrValidEventIdIsRequired)
+		return
+	}
+
+	// check if event exist
+	if _, err := h.store.Get(r.Context(), &objects.GetRequest{ID: id}); err != nil {
+		WriteError(w, err)
+		return
+	}
+
+	if err := h.store.Delete(r.Context(), &objects.DeleteRequest{ID: id}); err != nil {
+		WriteError(w, err)
+		return
+	}
+	WriteResponse(w, &objects.EventResponseWrapper{})
 }
